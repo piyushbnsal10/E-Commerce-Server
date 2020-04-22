@@ -30,9 +30,9 @@ public class DbInit implements CommandLineRunner {
         this.productsRepo.deleteAll();
 
         // Crete users
-        User dan = new User("dan","dfsdhfgjdfs",passwordEncoder.encode("dan123"));
-        User admin = new User("admin","dfsdhfgjdfs",passwordEncoder.encode("admin123"));
-        User manager = new User("manager","dfsdhfgjdfs",passwordEncoder.encode("manager123"));
+        User dan = new User("dan","dan123@gmail.com",passwordEncoder.encode("dan123"));
+        User admin = new User("admin","admin123@gmail.com",passwordEncoder.encode("admin123"));
+        User manager = new User("manager","manager123@gmail.com",passwordEncoder.encode("manager123"));
         
         //create products
         //(String title, String desc, String category, int prices, String imageUrl

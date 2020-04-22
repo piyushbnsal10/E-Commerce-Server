@@ -1,29 +1,39 @@
 package rc.bootsecurity.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
-
+@Table(name="PRODUCT")
 public class Product {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="PID")
 	int pId;
 	
+	@Column(name="TITLE",unique = true, nullable = false)
 	String title;
+	@Column(name="DESCRIPTION",nullable = false)
 	String descp;
+	@Column(name="CATEGORY",nullable = false)
 	String category;
+	@Column(name="PRICE", nullable = false)
 	int price;
+	@Column(name="IMAGE_URL",unique = true, nullable = false)
 	String imgUrl;
+	
 	
 	public Product() {}
 	
 	
 
-	public Product(String title, String descp, String category, int prices, String imageUrl) {
+	public Product(@NotBlank String title,@NotBlank String descp,@NotBlank String category,@NotBlank int prices,@NotBlank String imageUrl) {
 		super();
 		this.title = title;
 		this.descp = descp;
@@ -80,6 +90,33 @@ public class Product {
 
 	public void setImgUrl(String imageUrl) {
 		this.imgUrl = imageUrl;
+	}
+	
+	
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + pId;
+		return result;
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (pId != other.pId)
+			return false;
+		return true;
 	}
 
 
