@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import rc.bootsecurity.db.CartRepo;
 import rc.bootsecurity.db.ProductRepo;
 import rc.bootsecurity.db.UserRepository;
+import rc.bootsecurity.model.Cart;
 import rc.bootsecurity.model.Product;
 import rc.bootsecurity.model.User;
 
@@ -23,30 +25,62 @@ public class CartController {
     private UserRepository	userRepository;
 	
 	@Autowired
-	ProductRepo productsRepo;
+	private CartRepo cartRepo;
+	
+	@Autowired
+	private ProductRepo productRepo;
 	
 	 @GetMapping("/users/{username}/product")
-	    public List<Product> getProduct(@PathVariable String username) {
+	    public List<Cart> getProduct(@PathVariable String username) {
 		 	User user=userRepository.findByUsername(username);
-	    	return user.getProducts();
+	    	return user.getCarts();
 	    }
 	    
-	    @PostMapping(path="/users/{username}/product/{pId}")
-	    public void addProductToCart(@PathVariable String username,@PathVariable Integer pId) {
+	    @PostMapping(path="/users/{username}/cart/{pId}")
+	    public void addProductToCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
-	    	Product product=productsRepo.findById(pId).get();
-	    	user.getProducts().add(product);
+	    	Product product=productRepo.findById(pId).get();
+	    	
+	    	if(user.getProductFromCart(product.getpId())!=null) {
+	    		
+	    		Cart userProduct=user.getProductFromCart(product.getpId());
+	    		int quantity=userProduct.getQuantity();
+	    		
+	    		if(product.getQuantity()<1)
+	    			throw new Exception("Product Quantity is less !!");
+	    		
+	    		product.setQuantity(product.getQuantity()-1);
+	    		userProduct.setQuantity(quantity+1);
+	    		cartRepo.save(userProduct);
+	    		
+	    	} else {
+	    		Cart userProduct=new Cart();
+	    		userProduct.setpId(product.getpId());
+	    		userProduct.setCategory(product.getCategory());
+	    		userProduct.setDescp(product.getDescp());
+	    		userProduct.setImgUrl(product.getImgUrl());
+	    		userProduct.setTitle(product.getTitle());
+	    		userProduct.setPrice(product.getPrice());
+	    		userProduct.setQuantity(1);
+	    		
+	    		product.setQuantity(product.getQuantity()-1);
+	    		cartRepo.save(userProduct);
+	    		user.getCarts().add(userProduct);
+	    	}
 	    	
 	    	userRepository.save(user);
 	    	
 	    }
 	    
-	    @DeleteMapping("/users/{username}/product/{pId}")
+	    @DeleteMapping("/users/{username}/cart/{pId}")
 	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
-	    	Product product=productsRepo.findById(pId).get();
-	    	user.getProducts().remove(product);
+	    	Cart userProduct=cartRepo.findBypId(pId);
+	    	Product product=productRepo.findById(pId).get();
+	    	product.setQuantity(product.getQuantity()+userProduct.getQuantity());
+	    	user.getCarts().remove(userProduct);
+	    	cartRepo.delete(userProduct);
+	    	productRepo.save(product);
 	    	
-	    	userRepository.save(user);
 	    }
 }

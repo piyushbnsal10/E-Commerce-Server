@@ -9,14 +9,15 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-@Table(name="PRODUCT")
-public class Product {
-
+@Table(name="CART")
+public class Cart {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="PID")
-	int pId;
-	
+	@Column(name="CID",updatable=true,unique=true,nullable=false)
+	int cId;	
+	@Column(name="PID",updatable=true,unique=true,nullable=false)
+	int pId;	
 	@Column(name="TITLE",unique = true, nullable = false)
 	String title;
 	@Column(name="DESCRIPTION",nullable = false)
@@ -31,11 +32,11 @@ public class Product {
 	int quantity;
 	
 	
-	public Product() {}
+	public Cart() {}
 	
 	
 
-	public Product(@NotBlank String title,@NotBlank String descp,@NotBlank String category,@NotBlank int prices,@NotBlank String imageUrl,@NotBlank int quantity) {
+	public Cart(@NotBlank String title,@NotBlank String descp,@NotBlank String category,@NotBlank int prices,@NotBlank String imageUrl,@NotBlank int quantity) {
 		super();
 		this.title = title;
 		this.descp = descp;
@@ -44,8 +45,14 @@ public class Product {
 		this.imgUrl = imageUrl;
 		this.quantity=quantity;
 	}
+	
+	public int getcId() {
+		return cId;
+	}
 
-
+	public void setcId(int cId) {
+		this.cId = cId;
+	}
 
 	public int getpId() {
 		return pId;
@@ -99,6 +106,8 @@ public class Product {
 		return quantity;
 	}
 
+
+
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
@@ -123,17 +132,21 @@ public class Product {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		Cart other = (Cart) obj;
 		if (pId != other.pId)
 			return false;
 		return true;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Product [pId=" + pId + ", title=" + title + ", descp=" + descp + ", category=" + category + ", price="
+		return "Cart [pId=" + pId + ", title=" + title + ", descp=" + descp + ", category=" + category + ", price="
 				+ price + ", imgUrl=" + imgUrl + ", quantity=" + quantity + "]";
 	}
+
+
 
 
 

@@ -33,27 +33,21 @@ public class User {
 	@Column(name = "PASSWORD",nullable = false)
     private String password;
     
+    @Column(name = "ROLE",nullable = false)
+    private String role="user";
+    
 //    @OneToMany(mappedBy="User",
 //    			cascade= {CascadeType.PERSIST,CascadeType.MERGE,
 //    						CascadeType.DETACH,CascadeType.REFRESH
 //    			})
     @ManyToMany
-    @JoinTable(name = "USER_PRODUCT", 
+    @JoinTable(name = "USER_CART", 
     joinColumns = { @JoinColumn(name = "UID") }, 
-    inverseJoinColumns = { @JoinColumn(name = "PID") })
-    private List<Product> products=new ArrayList<Product>(); 
+    inverseJoinColumns = { @JoinColumn(name = "CID") })
+    private List<Cart> carts=new ArrayList<Cart>(); 
 
     public User() {
     }
-
-//    public User(Long id) {
-//        this.id = id;
-//    }
-
-//    public User(String username, @NotBlank String password) {
-//        this.username = username;
-//        this.password = password;
-//    }
 
     public User(@NotBlank String username, @NotBlank String email, @NotBlank String password) {
         this.username = username;
@@ -94,16 +88,38 @@ public class User {
     }
     
     
-    public List<Product> getProducts() {
-		return products;
+    public String getRole() {
+		return role;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public List<Cart> getCarts() {
+		return carts;
 	}
 	
-	
-	
+	public Cart getProductFromCart(int pId) {
+		int size=this.getCarts().size();
+		
+		
+		if(size==0)
+			return null;
+		System.out.println(size);
+		
+		for(int i=0;i<size;i++) {
+			if(this.getCarts().get(i).getpId()==pId)
+				return this.getCarts().get(i);
+		}
+		
+		return null;
+	}
+
+	public void setCarts(List<Cart> carts) {
+		this.carts = carts;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -129,13 +145,5 @@ public class User {
 		return true;
 	}
 
-	@Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+	
 }
