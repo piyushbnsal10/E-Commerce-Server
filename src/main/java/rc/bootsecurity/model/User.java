@@ -3,7 +3,6 @@ package rc.bootsecurity.model;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
