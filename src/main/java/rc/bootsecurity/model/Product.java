@@ -12,139 +12,6 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "PRODUCT")
 public class Product {
 
-<<<<<<< HEAD
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="PID")
-	int pId;
-	
-	@Column(name="TITLE",unique = true, nullable = false)
-	String title;
-	@Column(name="DESCRIPTION",nullable = false)
-	String descp;
-	@Column(name="CATEGORY",nullable = false)
-	String category;
-	@Column(name="PRICE", nullable = false)
-	int price;
-	@Column(name="IMAGE_URL",unique = true, nullable = false)
-	String imgUrl;
-	@Column(name="QUANTITY",nullable=false)
-	int quantity;
-	
-	
-	public Product() {}
-	
-	
-
-	public Product(@NotBlank String title,@NotBlank String descp,@NotBlank String category,@NotBlank int prices,@NotBlank String imageUrl,@NotBlank int quantity) {
-		super();
-		this.title = title;
-		this.descp = descp;
-		this.category = category;
-		this.price = prices;
-		this.imgUrl = imageUrl;
-		this.quantity=quantity;
-	}
-
-
-
-	public int getpId() {
-		return pId;
-	}
-
-	public void setpId(int pId) {
-		this.pId = pId;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescp() {
-		return descp;
-	}
-
-	public void setDescp(String descp) {
-		this.descp = descp;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public void setPrice(int prices) {
-		this.price = prices;
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imageUrl) {
-		this.imgUrl = imageUrl;
-	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + pId;
-		return result;
-	}
-
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (pId != other.pId)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Product [pId=" + pId + ", title=" + title + ", descp=" + descp + ", category=" + category + ", price="
-				+ price + ", imgUrl=" + imgUrl + ", quantity=" + quantity + "]";
-	}
-
-
-
-	
-
-	
-	
-	
-	
-=======
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "PID")
@@ -160,18 +27,21 @@ public class Product {
   int price;
   @Column(name = "IMAGE_URL", unique = true, nullable = false)
   String imgUrl;
+  @Column(name = "QUANTITY", nullable = false)
+  int quantity;
 
   public Product() {
   }
 
   public Product(@NotBlank String title, @NotBlank String descp, @NotBlank String category, @NotBlank int prices,
-      @NotBlank String imageUrl) {
+      @NotBlank String imageUrl, @NotBlank int quantity) {
     super();
     this.title = title;
     this.descp = descp;
     this.category = category;
     this.price = prices;
     this.imgUrl = imageUrl;
+    this.quantity = quantity;
   }
 
   public int getpId() {
@@ -222,6 +92,14 @@ public class Product {
     this.imgUrl = imageUrl;
   }
 
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -246,8 +124,8 @@ public class Product {
 
   @Override
   public String toString() {
-    return "Products [pId=" + pId + ", title=" + title + ", descp=" + descp + ", category=" + category + ", price="
-        + price + ", imgUrl=" + imgUrl + "]";
+    return "Product [pId=" + pId + ", title=" + title + ", descp=" + descp + ", category=" + category + ", price="
+        + price + ", imgUrl=" + imgUrl + ", quantity=" + quantity + "]";
   }
->>>>>>> 652b2e47bd0776f3702138aab726692af0538881
+
 }
