@@ -32,7 +32,7 @@ public class WishlistController {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	 @GetMapping("/users/{username}/wishlist/product")
+	 @GetMapping("/users/{username}/wishlist")
 	    public List<Wishlist> getProduct(@PathVariable String username) {
 		 	User user=userRepository.findByUsername(username);
 	    	return user.getWishlists();
