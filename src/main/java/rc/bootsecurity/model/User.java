@@ -35,14 +35,15 @@ public class User {
   @Column(name = "ROLE", nullable = false)
   private String role = "user";
 
-  // @OneToMany(mappedBy="User",
-  // cascade= {CascadeType.PERSIST,CascadeType.MERGE,
-  // CascadeType.DETACH,CascadeType.REFRESH
-  // })
   @ManyToMany
   @JoinTable(name = "USER_CART", joinColumns = { @JoinColumn(name = "UID") }, inverseJoinColumns = {
       @JoinColumn(name = "CID") })
   private List<Cart> carts = new ArrayList<Cart>();
+  
+  @ManyToMany
+  @JoinTable(name = "USER_WISHLIST", joinColumns = { @JoinColumn(name = "UID") }, inverseJoinColumns = {
+      @JoinColumn(name = "WID") })
+  private List<Wishlist> wishlists = new ArrayList<Wishlist>();
 
   public User() {
   }
@@ -100,14 +101,10 @@ public class User {
   public Cart getProductFromCart(int pId) {
     int size = this.getCarts().size();
 
-    if (size == 0)
-      return null;
-    System.out.println(size);
-
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) 
       if (this.getCarts().get(i).getpId() == pId)
         return this.getCarts().get(i);
-    }
+    
 
     return null;
   }
@@ -115,8 +112,28 @@ public class User {
   public void setCarts(List<Cart> carts) {
     this.carts = carts;
   }
+  
 
-  @Override
+  public List<Wishlist> getWishlists() {
+	return wishlists;
+}
+  
+  public Wishlist getProductFromWishlist(int pId) {
+	    int size = this.getWishlists().size();
+
+	    for (int i = 0; i < size; i++) 
+	      if (this.getWishlists().get(i).getpId() == pId)
+	        return this.getWishlists().get(i);
+	    
+	    return null;
+  }
+	    
+
+public void setWishlists(List<Wishlist> wishlists) {
+	this.wishlists = wishlists;
+}
+
+@Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;

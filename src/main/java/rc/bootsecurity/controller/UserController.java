@@ -55,14 +55,6 @@ public class UserController {
         return userService.getUserCount();
     }
     
-    @PostMapping("/login") 
-    public void login(@RequestBody LoginViewModel model,HttpServletRequest request,HttpServletResponse response) throws IOException {
-    	User user=userService.getUserByUsername(model.getUsername());
-    	System.out.println(request);
-    	response.getWriter().print(user.getId());
-    	
-    }
-    
    
 }
 

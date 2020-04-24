@@ -30,7 +30,7 @@ public class CartController {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	 @GetMapping("/users/{username}/product")
+	 @GetMapping("/users/{username}/cart")
 	    public List<Cart> getProduct(@PathVariable String username) {
 		 	User user=userRepository.findByUsername(username);
 	    	return user.getCarts();

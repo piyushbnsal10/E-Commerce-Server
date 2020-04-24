@@ -1,29 +1,22 @@
 package rc.bootsecurity.controller;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import rc.bootsecurity.db.ProductRepo;
 import rc.bootsecurity.model.Product;
-
-
-
-
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
@@ -33,41 +26,44 @@ public class ProductController {
 	@Autowired
 	ProductRepo productsRepo;
 	
-	@RequestMapping(path="/products" , method=RequestMethod.POST)
-	public ResponseEntity<Void> addCourse(@RequestBody Product products){
+	@PostMapping(path="/products")
+	public ResponseEntity<Void> addProduct(@RequestBody Product products){
 		productsRepo.save(products);
 		System.out.println(products);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(path="/products/{pId}" , method=RequestMethod.DELETE)
-	public void deleteCourse(@PathVariable("pId") int pId){
+	@DeleteMapping(path="/products/{pId}")
+	public void deleteProduct(@PathVariable("pId") int pId){
 		productsRepo.deleteById(pId);
 	}
 	
-	@RequestMapping(path="/products/pId/{pId}" , method=RequestMethod.GET)
+	@GetMapping(path="/products/pId/{pId}")
 	public Product getProductById(@PathVariable("pId") int pId){
 		return productsRepo.findById(pId).get();
 	}
 	
-	@RequestMapping(path="/products/pId/{pId}" , method=RequestMethod.PUT)
+	@PutMapping(path="/products/pId/{pId}")
 	public void updateProduct(@PathVariable("pId") int id, @RequestBody Product products) {
 		Product product = getProductById(id);
 		product.setTitle(products.getTitle());
 		product.setPrice(products.getPrice());
 		product.setCategory(products.getCategory());
+		product.setImgUrl(products.getTitle());
 		product.setDescp(products.getDescp());
+		product.setQuantity(products.getQuantity());
+		
 		productsRepo.save(product);
 	}
 	
-	@RequestMapping(path="/products",method=RequestMethod.GET)
+	@GetMapping(path="/products")
 	public List<Product> findAllProducts()
 	{
 		List<Product> products= productsRepo.findAll();
 		return products;
 	}
 	
-	@RequestMapping(path="/products/{title}", method=RequestMethod.GET)
+	@GetMapping(path="/products/{title}")
 	public ResponseEntity<Product> findProductsByTitle(@PathVariable("title") String title)
 	{
 		Product products =productsRepo.findByTitle(title);
@@ -80,7 +76,7 @@ public class ProductController {
 		return re;
 	}
 	
-	@RequestMapping(path="/products/{category}", method=RequestMethod.GET)
+	@GetMapping(path="/products/{category}")
 	public ResponseEntity<Product> findProductsByCategory(@PathVariable("category") String category)
 	{
 		Product products =productsRepo.findByCategory(category);
