@@ -65,7 +65,7 @@ public class WishlistController {
 	    	
 	    }
 	    
-	    @DeleteMapping("/users/{username}/wishlsit/{pId}")
+	    @DeleteMapping("/users/{username}/wishlist/{pId}")
 	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Wishlist userWishlist=wishlistRepo.findBypId(pId);
