@@ -38,7 +38,7 @@ public class UserController {
         return userService.getUsername(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public User addUser(@RequestBody User user) {
     	System.out.println(user);
        return userService.addUser(user);

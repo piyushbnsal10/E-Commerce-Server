@@ -32,7 +32,7 @@ public class CartController {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	 @GetMapping("/")
+	 @GetMapping("")
 	    public List<Cart> getProduct(@PathVariable String username) {
 		 	User user=userRepository.findByUsername(username);
 	    	return user.getCarts();
@@ -74,7 +74,7 @@ public class CartController {
 	    	
 	    }
 	    
-	    @DeleteMapping("{pId}")
+	    @DeleteMapping("/{pId}")
 	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Cart userProduct=cartRepo.findBypId(pId);

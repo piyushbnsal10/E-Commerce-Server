@@ -26,7 +26,7 @@ public class ProductController {
 	@Autowired
 	ProductRepo productsRepo;
 	
-	@PostMapping(path="/")
+	@PostMapping(path="")
 	public ResponseEntity<Void> addProduct(@RequestBody Product products){
 		productsRepo.save(products);
 		System.out.println(products);
@@ -56,7 +56,7 @@ public class ProductController {
 		productsRepo.save(product);
 	}
 	
-	@GetMapping(path="/")
+	@GetMapping(path="")
 	public List<Product> findAllProducts()
 	{
 		List<Product> products= productsRepo.findAll();
