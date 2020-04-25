@@ -77,7 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests().antMatchers(HttpMethod.POST, "/api/users").permitAll()
-        .antMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+        .antMatchers(HttpMethod.GET, "/products/**").permitAll()
         .and().addFilter(new JwtAuthenticationFilter(authenticationManager()))
         .addFilter(new JwtAuthorizationFilter(authenticationManager(), this.userRepository)).authorizeRequests()
         .antMatchers(HttpMethod.POST, "/api/login").permitAll()
