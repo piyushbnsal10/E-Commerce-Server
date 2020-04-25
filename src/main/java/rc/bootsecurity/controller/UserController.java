@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
+@RequestMapping(path="/users")
 public class UserController {
 
     @Autowired
@@ -32,12 +33,12 @@ public class UserController {
     @Autowired
 	ProductRepo productsRepo;
 
-    @GetMapping("/users/{id}/name")
+    @GetMapping("/{id}/name")
     public String getUsername(@PathVariable Long id) {
         return userService.getUsername(id);
     }
 
-    @PostMapping("/users")
+    @PostMapping("/")
     public User addUser(@RequestBody User user) {
     	System.out.println(user);
        return userService.addUser(user);
@@ -50,7 +51,7 @@ public class UserController {
 		return user;
     }
     
-    @GetMapping("/users/count")
+    @GetMapping("/count")
     public long getUserCount() {
         return userService.getUserCount();
     }

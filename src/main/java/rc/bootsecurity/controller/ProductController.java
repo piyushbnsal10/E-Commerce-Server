@@ -20,30 +20,30 @@ import rc.bootsecurity.model.Product;
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
-@RequestMapping(path="/api")
+@RequestMapping(path="/products")
 public class ProductController {
 
 	@Autowired
 	ProductRepo productsRepo;
 	
-	@PostMapping(path="/products")
+	@PostMapping(path="/")
 	public ResponseEntity<Void> addProduct(@RequestBody Product products){
 		productsRepo.save(products);
 		System.out.println(products);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping(path="/products/{pId}")
+	@DeleteMapping(path="/{pId}")
 	public void deleteProduct(@PathVariable("pId") int pId){
 		productsRepo.deleteById(pId);
 	}
 	
-	@GetMapping(path="/products/pId/{pId}")
+	@GetMapping(path="/{pId}")
 	public Product getProductById(@PathVariable("pId") int pId){
 		return productsRepo.findById(pId).get();
 	}
 	
-	@PutMapping(path="/products/pId/{pId}")
+	@PutMapping(path="/{pId}")
 	public void updateProduct(@PathVariable("pId") int id, @RequestBody Product products) {
 		Product product = getProductById(id);
 		product.setTitle(products.getTitle());
@@ -56,14 +56,14 @@ public class ProductController {
 		productsRepo.save(product);
 	}
 	
-	@GetMapping(path="/products")
+	@GetMapping(path="/")
 	public List<Product> findAllProducts()
 	{
 		List<Product> products= productsRepo.findAll();
 		return products;
 	}
 	
-	@GetMapping(path="/products/{title}")
+	@GetMapping(path="/title/{title}")
 	public ResponseEntity<Product> findProductsByTitle(@PathVariable("title") String title)
 	{
 		Product products =productsRepo.findByTitle(title);
@@ -76,7 +76,7 @@ public class ProductController {
 		return re;
 	}
 	
-	@GetMapping(path="/products/{category}")
+	@GetMapping(path="/category/{category}")
 	public ResponseEntity<Product> findProductsByCategory(@PathVariable("category") String category)
 	{
 		Product products =productsRepo.findByCategory(category);

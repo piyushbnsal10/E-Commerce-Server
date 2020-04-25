@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import rc.bootsecurity.db.CartRepo;
@@ -21,6 +22,7 @@ import rc.bootsecurity.model.Wishlist;
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
+@RequestMapping(path="/users/{username}/wishlist")
 public class WishlistController {
 	
 	@Autowired
@@ -32,13 +34,13 @@ public class WishlistController {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	 @GetMapping("/users/{username}/wishlist")
+	 @GetMapping("/")
 	    public List<Wishlist> getProduct(@PathVariable String username) {
 		 	User user=userRepository.findByUsername(username);
 	    	return user.getWishlists();
 	    }
 	    
-	    @PostMapping(path="/users/{username}/wishlist/{pId}")
+	    @PostMapping("/{pId}")
 	    public String addProductToCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Product product=productRepo.findById(pId).get();
@@ -65,7 +67,7 @@ public class WishlistController {
 	    	
 	    }
 	    
-	    @DeleteMapping("/users/{username}/wishlist/{pId}")
+	    @DeleteMapping("/{pId}")
 	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Wishlist userWishlist=wishlistRepo.findBypId(pId);
