@@ -85,4 +85,10 @@ public class CartController {
 	    	productRepo.save(product);
 	    	
 	    }
+	    
+	    @GetMapping("/count")
+	    public int CartCount(@PathVariable String username) {
+	    	User user=userRepository.findByUsername(username);
+	    	return user.getCarts().size();
+	    }
 }

@@ -41,7 +41,7 @@ public class WishlistController {
 	    }
 	    
 	    @PostMapping("/{pId}")
-	    public String addProductToCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
+	    public String addProductToWishlist(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Product product=productRepo.findById(pId).get();
 	    	
@@ -68,10 +68,16 @@ public class WishlistController {
 	    }
 	    
 	    @DeleteMapping("/{pId}")
-	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
+	    public void deleteProductFromWishlist(@PathVariable String username,@PathVariable Integer pId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
 	    	Wishlist userWishlist=wishlistRepo.findBypId(pId);
 	    	user.getWishlists().remove(userWishlist);
 	    	wishlistRepo.delete(userWishlist);
+	    }
+	    
+	    @GetMapping("/count")
+	    public int wishistCount(@PathVariable String username) {
+	    	User user=userRepository.findByUsername(username);
+	    	return user.getWishlists().size();
 	    }
 }
