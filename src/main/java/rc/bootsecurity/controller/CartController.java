@@ -112,7 +112,7 @@ public class CartController {
 	    		
 	    		Cart userProduct=user.getProductFromCart(product.getpId());
 	    		
-	    		if(product.getQuantity()>edit.get("sub"))
+	    		if(userProduct.getQuantity()<edit.get("sub"))
 	    			throw new Exception("Sufficient quantity is not available in the cart");
 	    		
 	    		product.setQuantity(product.getQuantity()+edit.get("sub"));
