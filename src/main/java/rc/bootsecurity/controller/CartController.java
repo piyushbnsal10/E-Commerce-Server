@@ -1,5 +1,6 @@
 package rc.bootsecurity.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -86,6 +88,40 @@ public class CartController {
 	    	cartRepo.delete(userProduct);
 	    	productRepo.save(product);
 	    	
+	    }
+	    
+	    @PostMapping("/{pId}/edit")
+	    public void editCartProductQuantity(@PathVariable String username,@PathVariable Integer pId,@RequestBody HashMap<String,Integer> edit) throws Exception {
+	    	User user=userRepository.findByUsername(username);
+	    	Product product=productRepo.findById(pId).get();
+	    	
+	    	if(edit.containsKey("add")) {
+	    		
+	    		if(product.getQuantity()<edit.get("add"))
+	    			throw new Exception("Sufficient quantity is not available");
+	    		
+	    		Cart userProduct=user.getProductFromCart(product.getpId());
+	    		product.setQuantity(product.getQuantity()-edit.get("add"));
+	    		userProduct.setQuantity(userProduct.getQuantity()+edit.get("add"));
+	    		
+	    		cartRepo.save(userProduct);
+	    		
+	    	}
+	    	
+	    	else if(edit.containsKey("sub")) {
+	    		
+	    		Cart userProduct=user.getProductFromCart(product.getpId());
+	    		
+	    		if(product.getQuantity()>edit.get("sub"))
+	    			throw new Exception("Sufficient quantity is not available in the cart");
+	    		
+	    		product.setQuantity(product.getQuantity()+edit.get("sub"));
+	    		userProduct.setQuantity(userProduct.getQuantity()-edit.get("sub"));
+	    		
+	    		cartRepo.save(userProduct);
+	    	}
+	    	
+	    	userRepository.save(user);
 	    }
 	    
 	    @GetMapping("/count")

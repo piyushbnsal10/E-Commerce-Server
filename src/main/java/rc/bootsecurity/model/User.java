@@ -142,16 +142,6 @@ public class User {
 	public List<PreviousOrder> getPreviousOrders() {
 	return previousOrders;
   }
-	
-	public PreviousOrder getProductFromPreviousOrder(int pId) {
-	    int size = this.getPreviousOrders().size();
-
-	    for (int i = 0; i < size; i++) 
-	      if (this.getPreviousOrders().get(i).getpId() == pId)
-	        return this.getPreviousOrders().get(i);
-	    
-	    return null;
-  }
 
 	public void setPreviousOrders(List<PreviousOrder> previousOrders) {
 	this.previousOrders = previousOrders;
