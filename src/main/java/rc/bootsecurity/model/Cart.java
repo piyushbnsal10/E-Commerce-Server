@@ -16,9 +16,9 @@ public class Cart {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="CID",updatable=true,unique=true,nullable=false)
 	int cId;	
-	@Column(name="PID",updatable=true,unique=true,nullable=false)
+	@Column(name="PID",updatable=true,nullable=false)
 	int pId;	
-	@Column(name="TITLE",unique = true, nullable = false)
+	@Column(name="TITLE", nullable = false)
 	String title;
 	@Column(name="DESCRIPTION",nullable = false)
 	String descp;
@@ -26,7 +26,7 @@ public class Cart {
 	String category;
 	@Column(name="PRICE", nullable = false)
 	int price;
-	@Column(name="IMAGE_URL",unique = true, nullable = false)
+	@Column(name="IMAGE_URL", nullable = false)
 	String imgUrl;
 	@Column(name="QUANTITY",nullable=false)
 	int quantity;

@@ -67,10 +67,10 @@ public class WishlistController {
 	    	
 	    }
 	    
-	    @DeleteMapping("/{pId}")
-	    public void deleteProductFromWishlist(@PathVariable String username,@PathVariable Integer pId) throws Exception {
+	    @DeleteMapping("/{wId}")
+	    public void deleteProductFromWishlist(@PathVariable String username,@PathVariable Integer wId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
-	    	Wishlist userWishlist=wishlistRepo.findBypId(pId);
+	    	Wishlist userWishlist=wishlistRepo.findById(wId).get();
 	    	user.getWishlists().remove(userWishlist);
 	    	wishlistRepo.delete(userWishlist);
 	    }

@@ -53,6 +53,7 @@ public class CartController {
 	    		
 	    		product.setQuantity(product.getQuantity()-1);
 	    		userProduct.setQuantity(quantity+1);
+	    		
 	    		cartRepo.save(userProduct);
 	    		
 	    	} else {
@@ -66,6 +67,7 @@ public class CartController {
 	    		userProduct.setQuantity(1);
 	    		
 	    		product.setQuantity(product.getQuantity()-1);
+	    	
 	    		cartRepo.save(userProduct);
 	    		user.getCarts().add(userProduct);
 	    	}
@@ -74,11 +76,11 @@ public class CartController {
 	    	
 	    }
 	    
-	    @DeleteMapping("/{pId}")
-	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer pId) throws Exception {
+	    @DeleteMapping("/{cId}")
+	    public void deleteProductFromCart(@PathVariable String username,@PathVariable Integer cId) throws Exception {
 	    	User user=userRepository.findByUsername(username);
-	    	Cart userProduct=cartRepo.findBypId(pId);
-	    	Product product=productRepo.findById(pId).get();
+	    	Cart userProduct=cartRepo.findById(cId).get();
+	    	Product product=productRepo.findById(userProduct.getpId()).get();
 	    	product.setQuantity(product.getQuantity()+userProduct.getQuantity());
 	    	user.getCarts().remove(userProduct);
 	    	cartRepo.delete(userProduct);
