@@ -3,6 +3,7 @@ package rc.bootsecurity.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,6 +45,11 @@ public class User {
   @JoinTable(name = "USER_WISHLIST", joinColumns = { @JoinColumn(name = "UID") }, inverseJoinColumns = {
       @JoinColumn(name = "WID") })
   private List<Wishlist> wishlists = new ArrayList<Wishlist>();
+  
+  @ManyToMany(cascade = {CascadeType.ALL})
+  @JoinTable(name = "USER_ORDERED", joinColumns = { @JoinColumn(name = "UID") }, inverseJoinColumns = {
+	      @JoinColumn(name = "OID") })
+  private List<PreviousOrder> previousOrders= new ArrayList<PreviousOrder>();
 
   public User() {
   }
@@ -129,9 +135,27 @@ public class User {
   }
 	    
 
-public void setWishlists(List<Wishlist> wishlists) {
+  public void setWishlists(List<Wishlist> wishlists) {
 	this.wishlists = wishlists;
-}
+  }
+
+	public List<PreviousOrder> getPreviousOrders() {
+	return previousOrders;
+  }
+	
+	public PreviousOrder getProductFromPreviousOrder(int pId) {
+	    int size = this.getPreviousOrders().size();
+
+	    for (int i = 0; i < size; i++) 
+	      if (this.getPreviousOrders().get(i).getpId() == pId)
+	        return this.getPreviousOrders().get(i);
+	    
+	    return null;
+  }
+
+	public void setPreviousOrders(List<PreviousOrder> previousOrders) {
+	this.previousOrders = previousOrders;
+  }
 
 @Override
   public int hashCode() {
