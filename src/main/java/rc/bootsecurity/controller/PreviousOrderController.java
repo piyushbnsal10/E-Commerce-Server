@@ -53,7 +53,8 @@ public class PreviousOrderController {
 			previousOrder.setQuantity(cartProduct.get(i).getQuantity());
 			
 			pID_deleted.add(cartProduct.get(i).getcId());
-			user.getPreviousOrders().add(previousOrder);
+			//add at the starting of the array;
+			user.getPreviousOrders().add(0,previousOrder);
 		}
 		
 		user.getCarts().clear();

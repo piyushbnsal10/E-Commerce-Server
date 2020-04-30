@@ -1,12 +1,22 @@
 package rc.bootsecurity.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "PREVIOUS_ORDER")
@@ -15,7 +25,7 @@ public class PreviousOrder {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   @Column(name="OID",updatable=true,unique=true,nullable=false)
-  int cId;
+  int OId;
   @Column(name = "PID",nullable=false)
   int pId;
   @Column(name = "TITLE", nullable = false)
@@ -30,7 +40,12 @@ public class PreviousOrder {
   String imgUrl;
   @Column(name = "QUANTITY", nullable = false)
   int quantity;
-
+  @Column(name = "local_time", columnDefinition = "TIME")
+  private LocalTime localTime;
+   
+  @Column(name = "local_date", columnDefinition = "DATE")
+  private LocalDate localDate;
+  
   public PreviousOrder() {
   }
 
@@ -44,8 +59,16 @@ public class PreviousOrder {
     this.imgUrl = imageUrl;
     this.quantity = quantity;
   }
+  
+  public int getOId() {
+	return OId;
+  }
 
-  public int getpId() {
+  public void setOId(int oId) {
+	OId = oId;
+  }
+
+public int getpId() {
     return pId;
   }
 
@@ -100,8 +123,31 @@ public class PreviousOrder {
   public void setQuantity(int quantity) {
     this.quantity = quantity;
   }
+  
+  @PrePersist
+  protected void onLocalTime() {
+    localTime = LocalTime.now();
+    localDate = LocalDate.now();
+  }
+    
+  
+public LocalTime getLocalTime() {
+	return localTime;
+}
 
-  @Override
+public void setLocalTime(LocalTime localTime) {
+	this.localTime = localTime;
+}
+
+public LocalDate getLocalDate() {
+	return localDate;
+}
+
+public void setLocalDate(LocalDate localDate) {
+	this.localDate = localDate;
+}
+
+@Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
