@@ -56,9 +56,9 @@ public class UserController {
         return userService.getUserCount();
     }
     
-    @GetMapping("/{id}/role")
-    public String getUserCount(@PathVariable Long id) {
-        User user=userRepository.findById(id).get();
+    @GetMapping("/{username}/role")
+    public String getUserCount(@PathVariable String username) {
+    	User user=userRepository.findByUsername(username);
         return user.getRole();
     }
     
