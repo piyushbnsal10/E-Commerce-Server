@@ -3,6 +3,8 @@ package rc.bootsecurity.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rc.bootsecurity.db.CartRepo;
-import rc.bootsecurity.db.ProductRepo;
-import rc.bootsecurity.db.UserRepository;
-import rc.bootsecurity.db.WishlistRepo;
-import rc.bootsecurity.model.Cart;
-import rc.bootsecurity.model.Product;
-import rc.bootsecurity.model.User;
 import rc.bootsecurity.model.Wishlist;
+import rc.bootsecurity.service.WishlistService;
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
@@ -26,58 +22,46 @@ import rc.bootsecurity.model.Wishlist;
 public class WishlistController {
 	
 	@Autowired
-    private UserRepository	userRepository;
-	
-	@Autowired
-	private WishlistRepo wishlistRepo;
-	
-	@Autowired
-	private ProductRepo productRepo;
+	private WishlistService wishlistService;
 	
 	 @GetMapping("")
-	    public List<Wishlist> getProduct(@PathVariable String username) {
-		 	User user=userRepository.findByUsername(username);
-	    	return user.getWishlists();
+	    public ResponseEntity<List<Wishlist>> getProduct(@PathVariable String username) {
+		 try {
+		 		List<Wishlist> wishlists=wishlistService.getProductFromWishlist(username);
+		 		return new ResponseEntity<>(wishlists,HttpStatus.OK);
+		 	} catch(Exception e) {
+		 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		 	}
 	    }
 	    
 	    @PostMapping("/{pId}")
-	    public String addProductToWishlist(@PathVariable String username,@PathVariable Integer pId) throws Exception {
-	    	User user=userRepository.findByUsername(username);
-	    	Product product=productRepo.findById(pId).get();
-	    	
-	    	if(user.getProductFromWishlist(product.getpId())!=null) {
-	    		return "Product is already added to Wishlist";
-	    		
-	    	} else {
-	    		Wishlist userWishlist=new Wishlist();
-	    		userWishlist.setpId(product.getpId());
-	    		userWishlist.setCategory(product.getCategory());
-	    		userWishlist.setDescp(product.getDescp());
-	    		userWishlist.setImgUrl(product.getImgUrl());
-	    		userWishlist.setTitle(product.getTitle());
-	    		userWishlist.setPrice(product.getPrice());
-	    		
-	    		wishlistRepo.save(userWishlist);
-	    		user.getWishlists().add(userWishlist);
-	    	}
-	    	
-	    	userRepository.save(user);
-	    	
-	    	return "Product added to wishlist";
+	    public ResponseEntity<String> addProductToWishlist(@PathVariable String username,@PathVariable Integer pId) throws Exception {
+	    	try {
+		 		wishlistService.addProductToWishlist(username, pId);
+		 		return new ResponseEntity<>("Product added to Wishlist",HttpStatus.CREATED);
+		 	} catch(Exception e) {
+		 		return new ResponseEntity<>("Product Can't be added",HttpStatus.INTERNAL_SERVER_ERROR);
+		 	}
 	    	
 	    }
 	    
 	    @DeleteMapping("/{wId}")
-	    public void deleteProductFromWishlist(@PathVariable String username,@PathVariable Integer wId) throws Exception {
-	    	User user=userRepository.findByUsername(username);
-	    	Wishlist userWishlist=wishlistRepo.findById(wId).get();
-	    	user.getWishlists().remove(userWishlist);
-	    	wishlistRepo.delete(userWishlist);
+	    public ResponseEntity<String> deleteProductFromWishlist(@PathVariable String username,@PathVariable Integer wId) throws Exception {
+	    	try {
+		 		wishlistService.deleteProductFromWishlist(username,wId);
+		 		return new ResponseEntity<>("Product deleted from Wishlist",HttpStatus.OK);
+		 	} catch(Exception e) {
+		 		return new ResponseEntity<>("Product Can't be deleted",HttpStatus.INTERNAL_SERVER_ERROR);
+		 	}
 	    }
 	    
 	    @GetMapping("/count")
-	    public int wishistCount(@PathVariable String username) {
-	    	User user=userRepository.findByUsername(username);
-	    	return user.getWishlists().size();
+	    public ResponseEntity<Integer> wishlistCount(@PathVariable String username) {
+	    	try {
+		 		int count=wishlistService.wishlistCount(username);
+		 		return new ResponseEntity<>(count,HttpStatus.OK);
+		 	} catch(Exception e) {
+		 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		 	}
 	    }
 }

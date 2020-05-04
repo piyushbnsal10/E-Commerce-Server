@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rc.bootsecurity.db.ProductRepo;
 import rc.bootsecurity.model.Product;
+import rc.bootsecurity.service.ProductService;
 
 @RestController
 @CrossOrigin(origins="*",allowedHeaders="*")
@@ -24,68 +24,77 @@ import rc.bootsecurity.model.Product;
 public class ProductController {
 
 	@Autowired
-	ProductRepo productsRepo;
+	ProductService productService;
 	
 	@PostMapping(path="")
-	public ResponseEntity<Void> addProduct(@RequestBody Product products){
-		productsRepo.save(products);
-		System.out.println(products);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<String> addProduct(@RequestBody Product products){
+		try {
+			productService.addProduct(products);
+			return new ResponseEntity<>("Product Added Successfully",HttpStatus.CREATED);
+		} catch(Exception e) {
+			return new ResponseEntity<>("Product can't be added",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@DeleteMapping(path="/{pId}")
-	public void deleteProduct(@PathVariable("pId") int pId){
-		productsRepo.deleteById(pId);
+	public ResponseEntity<String> deleteProduct(@PathVariable("pId") int pId){
+		try {
+			productService.deleteProduct(pId);
+			return new ResponseEntity<>("Product Deleted Successfully",HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>("Product can't be Deleted",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping(path="/{pId}")
-	public Product getProductById(@PathVariable("pId") int pId){
-		return productsRepo.findById(pId).get();
+	public ResponseEntity<Product> getProductById(@PathVariable("pId") int pId){
+		try {
+			Product product=productService.getProductById(pId);
+			return new ResponseEntity<>(product,HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
-	@PutMapping(path="/{pId}")
-	public void updateProduct(@PathVariable("pId") int id, @RequestBody Product products) {
-		Product product = getProductById(id);
-		product.setTitle(products.getTitle());
-		product.setPrice(products.getPrice());
-		product.setCategory(products.getCategory());
-		product.setImgUrl(products.getTitle());
-		product.setDescp(products.getDescp());
-		product.setQuantity(products.getQuantity());
-		
-		productsRepo.save(product);
+	@PutMapping(path="/{pId}")	
+	public ResponseEntity<String> updateProduct(@PathVariable("pId") int id, @RequestBody Product products) {
+		try {
+			productService.updateProduct(id, products);
+			return new ResponseEntity<>("Product Updated Successfully",HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>("Product Can't be Updated",HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping(path="")
-	public List<Product> findAllProducts()
-	{
-		List<Product> products= productsRepo.findAll();
-		return products;
+	public ResponseEntity<List<Product>> findAllProducts() {
+		try {
+			List<Product> products= productService.findAllProducts();
+			return new ResponseEntity<>(products,HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping(path="/title/{title}")
 	public ResponseEntity<Product> findProductsByTitle(@PathVariable("title") String title)
 	{
-		Product products =productsRepo.findByTitle(title);
-		ResponseEntity<Product> re = null;
-		if(products == null){
-			re = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return re;
+		try { 
+			Product product =productService.findProductsByTitle(title);
+			return new ResponseEntity<>(product,HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		re = new ResponseEntity<>(products, HttpStatus.OK);
-		return re;
 	}
 	
 	@GetMapping(path="/category/{category}")
 	public ResponseEntity<Product> findProductsByCategory(@PathVariable("category") String category)
 	{
-		Product products =productsRepo.findByCategory(category);
-		ResponseEntity<Product> re = null;
-		if(products == null){
-			re = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			return re;
+		try { 
+			Product product =productService.findProductsByCategory(category);
+			return new ResponseEntity<>(product,HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		re = new ResponseEntity<>(products, HttpStatus.OK);
-		return re;
 	}
 }
